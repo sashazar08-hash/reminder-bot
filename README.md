@@ -1,2 +1,9 @@
-# reminder-bot
-reminder-bot in telegram with important dates
+# Reminder Bot
+
+Telegram-бот, который хранит важные даты и напоминает о них заранее.
+
+## Установка
+(будет дополнено)
+
+## Запуск
+(будет дополнено)
