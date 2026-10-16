@@ -5,6 +5,9 @@ class ReminderBotError(Exception):
 class InvalidDateError(ReminderBotError):
     """Пользователь ввёл дату в неверном формате или несуществующую дату."""
 
+class InvalidDaysError(ReminderBotError):
+    """Пользователь ввёл неверное количество дней для напоминания."""
+
 
 class EventNotFoundError(ReminderBotError):
     """Событие с таким номером не найдено."""
