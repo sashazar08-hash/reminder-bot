@@ -18,7 +18,7 @@ class ReminderService:
         if today is None:
             today = date.today()
         for event in self.storage.get_all():
-            key = (event.event_id, today)
+            key = (event, today)
             if key in self._sent:
                 continue
             if event.should_remind(today):
