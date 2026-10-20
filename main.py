@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from bot.handlers import register_handlers
 from core.storage import JsonStorage
+from bot.reminders import ReminderService
 
 
 def main():
@@ -19,6 +20,8 @@ def main():
     register_handlers(bot, storage)
 
     print("Бот запущен. Остановить: Ctrl+C")
+    reminders = ReminderService(bot, storage)
+    reminders.start()
     bot.infinity_polling()
 
 
