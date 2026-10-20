@@ -9,6 +9,8 @@ from core.models import Event
 from core.storage import JsonStorage
 from core.exceptions import EventNotFoundError
 
+from bot.reminders import ReminderService
+
 def test_parse_date_valid():
     assert parse_date("25.12.2026") == date(2026, 12, 25)
 
@@ -42,3 +44,25 @@ def test_storage_delete_missing_event(tmp_path):
     storage = JsonStorage(str(tmp_path / "data.json"))
     with pytest.raises(EventNotFoundError):
         storage.delete(chat_id=1, event_id=99)
+
+
+class FakeBot:
+    def __init__(self):
+        self.sent = []
+
+    def send_message(self, chat_id, text):
+        self.sent.append((chat_id, text))
+
+
+def test_reminder_sent_only_once_per_day(tmp_path):
+    storage = JsonStorage(str(tmp_path / "data.json"))
+    storage.add(Event("Зачёт", date(2026, 12, 25),
+                      remind_days_before=1, chat_id=7))
+    bot = FakeBot()
+    service = ReminderService(bot, storage)
+
+    service.check_once(today=date(2026, 12, 24))
+    service.check_once(today=date(2026, 12, 24))   # вторая проверка в тот же день
+
+    assert len(bot.sent) == 1
+    assert bot.sent[0][0] == 7
